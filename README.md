@@ -1,2 +1,2 @@
-# personal_asistnat
+# Personal_assistnat
 Voice personal asistance using whisper AI, chat gpt API and neuradound TTS voices
