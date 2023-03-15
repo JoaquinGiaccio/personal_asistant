@@ -5,6 +5,8 @@ import transcriber
 import record_audio
 import gpt_api
 import json
+import neurasound_api
+from playsound import playsound
 
 def main(model):
 
@@ -19,16 +21,21 @@ def main(model):
     print(transcription)
     chat_answer = gpt_api.send_request(transcription)
 
-    print(chat_answer)
-    #print(str(chat_answer, 'ascii', errors='ignore'))
-    message = json.loads(str(chat_answer, 'utf8', errors='ignore'))
-    print(message)
-    
+    chat_answer = json.loads(chat_answer)
+
+    print(chat_answer['choices'])
+    message_dict = dict(chat_answer['choices'][0])
+    print(message_dict['message']['content'])
+
+    neurasound_api.neura_speak(message_dict['message']['content'])
+
+    playsound('neura_tts.wav')
+
 
 def parseInputArguments():
     
     parser = argparse.ArgumentParser(description='Process to create a transcription while sending the audio')
-    parser.add_argument("-m","--model", default="small", help="Model to use",
+    parser.add_argument("-m","--model", default="medium", help="Model to use",
                         choices=["tiny", "base", "small", "medium", "large", "large-v2"])
     parser.add_argument("-l","--language", default="es", help="language",
                         choices=["tiny", "base", "small", "medium", "large", "large-v2"])                    
@@ -39,6 +46,5 @@ def parseInputArguments():
     return model
 
 if __name__ == "__main__":
-
     model = parseInputArguments()
     main(model)
