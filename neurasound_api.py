@@ -14,7 +14,6 @@ def neura_speak(text):
     }
 
     json_data = {
-        #'ssml_string': "<speak> <voice name='" + voice + "' lang='" + accent + "'>" + text + "</voice> </speak>",
         'ssml_string': text,
     }
 
