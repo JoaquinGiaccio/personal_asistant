@@ -8,23 +8,29 @@ import json
 import neurasound_api
 from playsound import playsound
 
-def main(model):
+def main(model, gpt_model, tts_voice, tts_accent):
 
     whisper_model = model
     loaded_model = transcriber.load_model(whisper_model)
     print("ASR model loaded")
 
-    #record_audio.record_audio()
-    audio = record_audio.record_audio_sr()
-    print("Finish recording")
-    record_audio.audio_to_wav(audio)
-    print("Transcribing...")
-    transcription = transcriber.transcriber(loaded_model,'microphone-results.wav')
+    language = ""
+    
+    while language != "es":
+        audio = record_audio.record_audio_sr()
+        print("Finish recording")
+        record_audio.audio_to_wav(audio)
+        language, mel = transcriber.get_language(loaded_model, 'microphone-results.wav')
+        print("##################################### ",language)
 
-    print(transcription)
-    chat_answer = gpt_api.send_request(transcription,gpt_model)
+    print("Transcribing...")
+    transcription = transcriber.transcriber(loaded_model, mel)
+    print("Transcription: ",transcription)
+
+    print("Sending Transcriptioon to chat GPT")
+    chat_answer = gpt_api.send_request(transcription, gpt_model)
     chat_answer = json.loads(chat_answer)
-    print(chat_answer)
+    print("Chat answer: ", chat_answer)
 
     print(chat_answer['choices'])
     message_dict = dict(chat_answer['choices'][0])
@@ -33,7 +39,7 @@ def main(model):
 
     #ssml_message = format_message(message_dict['message']['content'], tts_voice, tts_accent)
     ssml_message = format_message(gpt_message, tts_voice, tts_accent)
-    print(ssml_message)
+    print("\nFormated text: ",ssml_message)
 
     #tts_status = neurasound_api.neura_speak(message_dict['message']['content'])
     tts_status = neurasound_api.neura_speak(ssml_message)
@@ -86,4 +92,4 @@ def parseInputArguments():
 
 if __name__ == "__main__":
     model, gpt_model, tts_voice, tts_accent = parseInputArguments()
-    main(model)
+    main(model, gpt_model, tts_voice, tts_accent)
