@@ -1,14 +1,17 @@
 import requests
+import os
 
-def send_request(text):
+def send_request(text,model):
+
+    openai_key = os.getenv('OPENAI_API_KEY')
 
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer ' + openai_key,
     }
 
     json_data = {
-        'model': 'gpt-3.5-turbo',
+        'model': model,
         'messages': [
             {
                 'role': 'user',
@@ -18,7 +21,5 @@ def send_request(text):
     }
 
     response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=json_data)
-
-    print(response.content)
 
     return response.content
