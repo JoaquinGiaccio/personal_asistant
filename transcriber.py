@@ -6,7 +6,7 @@ def load_model(model):
 
     return model_used
 
-def transcriber(model, audio_file):
+def get_language(model, audio_file):
 
     audio = whisper.load_audio(audio_file)
     audio = whisper.pad_or_trim(audio)
@@ -16,7 +16,15 @@ def transcriber(model, audio_file):
 
     # detect the spoken language
     _, probs = model.detect_language(mel)
-    print(f"Detected language: {max(probs, key=probs.get)}")
+    #print(f"Detected language: {max(probs, key=probs.get)}")
+    lang_set = {max(probs, key=probs.get)}
+    
+    for i in lang_set:
+        lang = str(i)
+
+    return lang, mel
+
+def transcriber(model, mel):
 
     # decode the audio
     options = whisper.DecodingOptions(fp16=False)

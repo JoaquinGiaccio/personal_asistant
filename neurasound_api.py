@@ -14,7 +14,7 @@ def neura_speak(text):
     }
 
     json_data = {
-        'ssml_string': "<speak> <voice name='m3' lang='arg'>" + text + "</voice> </speak>",
+        'ssml_string': text,
     }
 
     response = requests.post(neura_tts_url, headers=headers, json=json_data)

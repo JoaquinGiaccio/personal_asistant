@@ -1,7 +1,7 @@
 import requests
 import os
 
-def send_request(text,model):
+def send_request(text, model):
 
     openai_key = os.getenv('OPENAI_API_KEY')
 
