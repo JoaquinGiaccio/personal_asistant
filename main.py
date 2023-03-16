@@ -8,19 +8,19 @@ import json
 import neurasound_api
 from playsound import playsound
 
-def main(model, gpt_model, tts_voice, tts_accent):
+def main(model, language, gpt_model, tts_voice, tts_accent):
 
     whisper_model = model
     loaded_model = transcriber.load_model(whisper_model)
     print("ASR model loaded")
 
-    language = ""
-    
-    while language != "es":
+    detected_language = ""
+
+    while detected_language != str(language):
         audio = record_audio.record_audio_sr()
         print("Finish recording")
         record_audio.audio_to_wav(audio)
-        language, mel = transcriber.get_language(loaded_model, 'microphone-results.wav')
+        detected_language, mel = transcriber.get_language(loaded_model, 'microphone-results.wav')
         print("##################################### ",language)
 
     print("Transcribing...")
@@ -84,12 +84,13 @@ def parseInputArguments():
 
     args = parser.parse_args()
     model = args.asrmodel
+    language = args.language
     gpt_model = args.gptmodel
     tts_voice = args.tts_voice
     tts_accent = args.tts_accent
 
-    return model, gpt_model, tts_voice, tts_accent
+    return model, language, gpt_model, tts_voice, tts_accent
 
 if __name__ == "__main__":
-    model, gpt_model, tts_voice, tts_accent = parseInputArguments()
-    main(model, gpt_model, tts_voice, tts_accent)
+    model, language, gpt_model, tts_voice, tts_accent = parseInputArguments()
+    main(model, language, gpt_model, tts_voice, tts_accent)
