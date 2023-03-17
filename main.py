@@ -27,7 +27,7 @@ def main(model, language, gpt_model, tts_voice, tts_accent):
     transcription = transcriber.transcriber(loaded_model, mel)
     print("Transcription: ",transcription)
 
-    print("Sending Transcriptioon to chat GPT")
+    print("Sending Transcriptioon to openai API")
     chat_answer = gpt_api.send_request(transcription, gpt_model)
     chat_answer = json.loads(chat_answer)
     print("Chat answer: ", chat_answer)
@@ -52,6 +52,8 @@ def main(model, language, gpt_model, tts_voice, tts_accent):
 
 def format_message(text, voice, accent):
 
+    text = text.replace('.', ' <break time=\'1.5s\'/>')
+    text = text.replace(',',' ,')
     words = text.split()
     formated_text = ""
 
