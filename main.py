@@ -52,8 +52,9 @@ def main(model, language, gpt_model, tts_voice, tts_accent):
 
 def format_message(text, voice, accent):
 
-    text = text.replace('.', ' <break time=\'1.5s\'/>')
-    text = text.replace(',',' ,')
+    text = text.replace('. ', ' .')
+    text = text.replace(',', ' ,')
+    text = text.replace('?','? <break time=\'0.4s\'/>')
     words = text.split()
     formated_text = ""
 
@@ -64,6 +65,9 @@ def format_message(text, voice, accent):
             formated_text = formated_text + " " + ssml_tag
         else:
             formated_text = formated_text + " " + word
+
+    formated_text = formated_text.replace(' .', '.')
+    formated_text = formated_text.replace(' ,', ',')
 
     formated_text = "<speak> <voice name='" + voice + "' lang='" + accent + "'>" + formated_text + "</voice> </speak>"
 
