@@ -1,7 +1,7 @@
 import requests
 import os
 
-neura_tts_url = 'https://7d07-157-92-27-254.sa.ngrok.io/get-file'
+neura_tts_url = 'https://75c4-157-92-27-254.sa.ngrok.io/get-file'
 
 def neura_speak(text):
 
