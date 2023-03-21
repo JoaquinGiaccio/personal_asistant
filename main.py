@@ -83,7 +83,7 @@ def parseInputArguments():
                         choices=["en", "es"])
     parser.add_argument("-g","--gptmodel", default="gpt-3.5-turbo", help="openai gpt model to be used",
                         choices=["gpt-3.5-turbo", "text-davinci-003"])
-    parser.add_argument("--tts_voice", default="m3", help="neurasound tts voice",
+    parser.add_argument("--tts_voice", default="f1", help="neurasound tts voice",
                         choices=["f1", "f2","f3", "m1", "m2", "m3"])
     parser.add_argument("--tts_accent", default="arg", help="neurasound tts accent",
                         choices=["arg", "col", "ven"])                     
