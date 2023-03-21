@@ -27,7 +27,7 @@ def main(model, language, gpt_model, tts_voice, tts_accent):
     transcription = transcriber.transcriber(loaded_model, mel)
     print("Transcription: ",transcription)
 
-    print("Sending Transcriptioon to chat GPT")
+    print("Sending Transcriptioon to openai API")
     chat_answer = gpt_api.send_request(transcription, gpt_model)
     chat_answer = json.loads(chat_answer)
     print("Chat answer: ", chat_answer)
@@ -52,6 +52,9 @@ def main(model, language, gpt_model, tts_voice, tts_accent):
 
 def format_message(text, voice, accent):
 
+    text = text.replace('. ', ' .')
+    text = text.replace(',', ' ,')
+    text = text.replace('?','? <break time=\'0.4s\'/>')
     words = text.split()
     formated_text = ""
 
@@ -62,6 +65,9 @@ def format_message(text, voice, accent):
             formated_text = formated_text + " " + ssml_tag
         else:
             formated_text = formated_text + " " + word
+
+    formated_text = formated_text.replace(' .', '.')
+    formated_text = formated_text.replace(' ,', ',')
 
     formated_text = "<speak> <voice name='" + voice + "' lang='" + accent + "'>" + formated_text + "</voice> </speak>"
 
@@ -77,7 +83,7 @@ def parseInputArguments():
                         choices=["en", "es"])
     parser.add_argument("-g","--gptmodel", default="gpt-3.5-turbo", help="openai gpt model to be used",
                         choices=["gpt-3.5-turbo", "text-davinci-003"])
-    parser.add_argument("--tts_voice", default="m3", help="neurasound tts voice",
+    parser.add_argument("--tts_voice", default="f1", help="neurasound tts voice",
                         choices=["f1", "f2","f3", "m1", "m2", "m3"])
     parser.add_argument("--tts_accent", default="arg", help="neurasound tts accent",
                         choices=["arg", "col", "ven"])                     
